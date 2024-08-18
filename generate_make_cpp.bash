@@ -6,12 +6,17 @@ read -p "Enter the program name: " program_name
 # Prompt the user for the source files
 read -p "Enter the source files (space-separated, excluding \`main.cpp\`): " source_files
 read -p "Would you like to create header-files associated with the source files? (y/n): " answer
+read -p "Would you like to create a main.cpp file (with simple boiler-plate)? [y/n]: " main_answer
 
 INCLUDES=""
 
 if [ "$answer" == "y" ]; then
 	INCLUDES+="INCLUDES := \$(SRC:.cpp=.hpp)";
 	touch "${source_files//.cpp/.hpp}";
+fi
+
+if [ "$main_answer" == "y" ]; then
+	source_files+=" main.cpp"
 fi
 
 # Create the source_files
@@ -44,7 +49,6 @@ EOL
 
 echo "Makefile generated successfully."
 
-read -p "Would you like to create a main.cpp file (with simple boiler-plate)? [y/n]: " main_answer
 
 if [ "$main_answer" == "y" ]; then
 	cat<<EOF > main.cpp
@@ -58,3 +62,4 @@ int main(void) {
 
 EOF
 fi
+
