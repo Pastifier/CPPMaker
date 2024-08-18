@@ -11,8 +11,11 @@ read -p "Would you like to create a main.cpp file (with simple boiler-plate)? [y
 INCLUDES=""
 
 if [ "$answer" == "y" ]; then
+	for file in $source_files; do
+        header_file="${file%.cpp}.hpp"
+        touch "$header_file"
+    done
 	INCLUDES+="INCLUDES := \$(SRC:.cpp=.hpp)";
-	touch "${source_files//.cpp/.hpp}";
 fi
 
 if [ "$main_answer" == "y" ]; then
