@@ -72,15 +72,15 @@ all: \$(NAME)
 
 \$(NAME): \$(SRC)
 	\$(CXX) -o \$@ \$(CXXFLAGS) \$(SRC)
-	@printf "\$(GREEN)Compilation successful!\$(RESET)"
+	@printf "\$(GREEN)Compilation successful!\$(RESET)\n"
 
 clean:
 	rm -rf \$(NAME)
-	@printf "\$(YELLOW)Executable removed.\$(RESET)"
+	@printf "\$(YELLOW)Executable removed.\$(RESET)\n"
 
 ifeq (\$(valgrind_answer),y)
 valgrind:
-	@printf "\$(CURSIVE)Running valgrind...\$(RESET)"
+	@printf "\$(CURSIVE)Running valgrind...\$(RESET)\n"
 	valgrind --leak-check=full ./\$(NAME)
 endif
 
