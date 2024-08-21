@@ -72,15 +72,15 @@ all: \$(NAME)
 
 \$(NAME): \$(SRC)
 	\$(CXX) -o \$@ \$(CXXFLAGS) \$(SRC)
-	@echo "\$(GREEN)Compilation successful!\$(RESET)"
+	@printf "\$(GREEN)Compilation successful!\$(RESET)"
 
 clean:
 	rm -rf \$(NAME)
-	@echo "\$(YELLOW)Executable removed.\$(RESET)"
+	@printf "\$(YELLOW)Executable removed.\$(RESET)"
 
 ifeq (\$(valgrind_answer),y)
 valgrind:
-	@echo "\$(CURSIVE)Running valgrind...\$(RESET)"
+	@printf "\$(CURSIVE)Running valgrind...\$(RESET)"
 	valgrind --leak-check=full ./\$(NAME)
 endif
 
@@ -89,7 +89,7 @@ re: clean all
 .PHONY: all clean re
 EOL
 
-echo "Makefile generated successfully."
+printf "Makefile generated successfully."
 
 
 if [ "$main_answer" == "y" ]; then
