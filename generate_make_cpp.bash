@@ -85,7 +85,7 @@ if [ "$valgrind_answer" == "y" ]; then
 valgrind:
 	@printf "\$(CURSIVE)Running valgrind...\$(RESET)\n"
 	valgrind --leak-check=full ./\$(NAME)
-endif
+fi
 
 EOF
 
@@ -110,3 +110,4 @@ int main(void) {
 
 EOF
 fi
+
