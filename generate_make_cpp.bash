@@ -85,9 +85,10 @@ if [ "$valgrind_answer" == "y" ]; then
 valgrind:
 	@printf "\$(CURSIVE)Running valgrind...\$(RESET)\n"
 	valgrind --leak-check=full ./\$(NAME)
-fi
 
 EOF
+fi
+
 
 cat <<EOF >> Makefile
 re: clean all
