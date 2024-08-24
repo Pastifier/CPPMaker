@@ -48,7 +48,7 @@ fi
 touch $source_files
 
 # Create the Makefile
-cat <<EOL > Makefile
+cat <<EOF > Makefile
 # Program
 NAME := $program_name
 
@@ -77,17 +77,23 @@ all: \$(NAME)
 clean:
 	rm -rf \$(NAME)
 	@printf "\$(YELLOW)Executable removed.\$(RESET)\n"
+ 
+EOF
 
 ifeq (\$(valgrind_answer),y)
+cat <<EOF >> Makefile
 valgrind:
 	@printf "\$(CURSIVE)Running valgrind...\$(RESET)\n"
 	valgrind --leak-check=full ./\$(NAME)
 endif
 
+EOF
+
+cat <<EOF >> Makefile
 re: clean all
 
 .PHONY: all clean re
-EOL
+EOF
 
 printf "Makefile generated successfully."
 
