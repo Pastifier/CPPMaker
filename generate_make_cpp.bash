@@ -80,7 +80,7 @@ clean:
  
 EOF
 
-ifeq [ "$valgrind_answer" == "y" ]; then
+if [ "$valgrind_answer" == "y" ]; then
 	cat <<EOF >> Makefile
 valgrind:
 	@printf "\$(CURSIVE)Running valgrind...\$(RESET)\n"
