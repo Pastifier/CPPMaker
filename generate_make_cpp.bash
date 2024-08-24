@@ -81,7 +81,7 @@ clean:
 EOF
 
 ifeq [ "$valgrind_answer" == "y" ]; then
-cat <<EOF >> Makefile
+	cat <<EOF >> Makefile
 valgrind:
 	@printf "\$(CURSIVE)Running valgrind...\$(RESET)\n"
 	valgrind --leak-check=full ./\$(NAME)
