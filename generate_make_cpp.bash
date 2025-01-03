@@ -3,23 +3,23 @@
 # Prompt the user for the project name, exercise number, and program name
 read -p "Would you like to create a project directory? [y/n]: " project_answer
 if [ "$project_answer" == "y" ]; then
-	read -p "Enter the project name: " project_name
-	mkdir -p $project_name
-	cd $project_name
+  read -p "Enter the project name: " project_name
+  mkdir -p $project_name
+  cd $project_name
 fi
 
 read -p "Would you like to create an exercise directory? [y/n]: " exercise_answer
 if [ "$exercise_answer" == "y" ]; then
-	read -p "Enter the exercise: " exercise
-	if [ "$project_answer" == "n" ]; then
-		read -p "Would you like to create the exercise directory in current directory? [y/n]: " answer
-		if [ "$answer" == "n" ]; then
-			read -p "Enter the path to the exercise directory: " path
-			cd $path
-		fi
-	fi
-	mkdir -p $exercise
-	cd $exercise
+  read -p "Enter the exercise: " exercise
+  if [ "$project_answer" == "n" ]; then
+    read -p "Would you like to create the exercise directory in current directory? [y/n]: " answer
+    if [ "$answer" == "n" ]; then
+      read -p "Enter the path to the exercise directory: " path
+      cd $path
+    fi
+  fi
+  mkdir -p $exercise
+  cd $exercise
 fi
 
 read -p "Enter the program name: " program_name
@@ -31,24 +31,28 @@ read -p "Would you like to create a main.cpp file (with simple boiler-plate)? [y
 read -p "Would you like to include valgrind support in the Makefile? [y/n]: " valgrind_answer
 
 INCLUDES=""
+INCLUDE_DEP=""
 
 if [ "$answer" == "y" ]; then
-	for file in $source_files; do
-        header_file="${file%.cpp}.hpp"
-        touch "$header_file"
-    done
-	INCLUDES+="INCLUDES := \$(SRC:.cpp=.hpp)";
+  INCLUDES+="INCLUDES := "
+  for file in $source_files; do
+    header_file="${file%.cpp}.hpp"
+    touch "$header_file"
+    INCLUDES+="$header_file "
+  done
+  # INCLUDES+="INCLUDES := \$(SRC:.cpp=.hpp)"
+  INCLUDE_DEP+="\$(INCLUDES)"
 fi
 
 if [ "$main_answer" == "y" ]; then
-	source_files+=" main.cpp"
+  source_files+=" main.cpp"
 fi
 
 # Create the source_files
 touch $source_files
 
 # Create the Makefile
-cat <<EOF > Makefile
+cat <<EOF >Makefile
 # Program
 NAME := $program_name
 
@@ -70,37 +74,34 @@ $INCLUDES
 # Rules
 all: \$(NAME)
 
-\$(NAME): \$(SRC)
+\$(NAME): \$(SRC) $INCLUDE_DEP
 	\$(CXX) -o \$@ \$(CXXFLAGS) \$(SRC)
 	@printf "\$(GREEN)Compilation successful!\$(RESET)\n"
 
 clean:
 	rm -rf \$(NAME)
 	@printf "\$(YELLOW)Executable removed.\$(RESET)\n"
- 
 EOF
 
 if [ "$valgrind_answer" == "y" ]; then
-	cat <<EOF >> Makefile
-valgrind:
+  cat <<EOF >>Makefile
+valgrind: | \$(NAME)
 	@printf "\$(CURSIVE)Running valgrind...\$(RESET)\n"
 	valgrind --leak-check=full ./\$(NAME)
 
 EOF
 fi
 
-
-cat <<EOF >> Makefile
+cat <<EOF >>Makefile
 re: clean all
 
 .PHONY: all clean re
 EOF
 
-printf "Makefile generated successfully."
-
+printf "Makefile generated successfully.\n"
 
 if [ "$main_answer" == "y" ]; then
-	cat<<EOF > main.cpp
+  cat <<EOF >main.cpp
 #include <iostream>
 
 int main(void) {
@@ -111,4 +112,3 @@ int main(void) {
 
 EOF
 fi
-
