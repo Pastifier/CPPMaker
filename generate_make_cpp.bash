@@ -81,6 +81,8 @@ all: \$(NAME)
 clean:
 	rm -rf \$(NAME)
 	@printf "\$(YELLOW)Executable removed.\$(RESET)\n"
+
+ fclean: clean
 EOF
 
 if [ "$valgrind_answer" == "y" ]; then
@@ -95,7 +97,7 @@ fi
 cat <<EOF >>Makefile
 re: clean all
 
-.PHONY: all clean re
+.PHONY: all clean fclean re
 EOF
 
 printf "Makefile generated successfully.\n"
